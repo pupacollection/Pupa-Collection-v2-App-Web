@@ -1,0 +1,85 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    function isSignedIn() { return request.auth != null; }
+    function existing() { return resource.data; }
+    function incoming() { return request.resource.data; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+    
+    function isAdmin() {
+      return isSignedIn() && get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role in ['ADMIN', 'SUPER_ADMIN'];
+    }
+    
+    match /posts/{postId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /comments/{commentId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /postLikes/{likeId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /commentLikes/{likeId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /reports/{reportId} {
+      allow read: if (isSignedIn() && existing().reporterId == request.auth.uid) || isAdmin();
+      allow write: if false;
+    }
+    match /publicProfiles/{userId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /profiles/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update: if (isOwner(userId) && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'avatar', 'bio', 'updatedAt'])) || isAdmin();
+    }
+    
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /productVariants/{variantId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /orders/{orderId} {
+      allow read: if (isSignedIn() && existing().userId == request.auth.uid) || isAdmin();
+      allow update: if isAdmin();
+    }
+    match /pointTransactions/{transactionId} {
+      allow read: if (isSignedIn() && existing().userId == request.auth.uid) || isAdmin();
+    }
+    match /drops/{dropId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /secretContent/{contentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /userUnlocks/{unlockId} {
+      allow read: if (isSignedIn() && existing().userId == request.auth.uid) || isAdmin();
+    }
+    match /userTrophies/{trophyId} {
+      allow read: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+    match /rewards/{rewardId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /redemptions/{redemptionId} {
+      allow read: if (isSignedIn() && existing().userId == request.auth.uid) || isAdmin();
+      allow write: if isAdmin(); 
+    }
+  }
+}

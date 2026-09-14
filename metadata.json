@@ -1,0 +1,6 @@
+{
+  "name": "PUPA COLLECTION",
+  "description": "Nascida do underground. Feita para as ruas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

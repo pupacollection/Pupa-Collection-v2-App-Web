@@ -1,0 +1,47 @@
+{
+  "entities": {
+    "Profile": {
+      "title": "Profile",
+      "description": "User profile containing points, level, and identity",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "pupaId": { "type": "string", "maxLength": 20 },
+        "username": { "type": "string", "maxLength": 50 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "cpf": { "type": "string", "maxLength": 20 },
+        "phone": { "type": "string", "maxLength": 20 },
+        "email": { "type": "string", "maxLength": 100 },
+        "level": { "type": "number" },
+        "xp": { "type": "number" },
+        "points": { "type": "number" },
+        "role": { "type": "string", "enum": ["USER", "ADMIN", "SUPER_ADMIN"] },
+        "isBlocked": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "pupaId", "username", "email", "role"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Store product",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "price": { "type": "number" },
+        "active": { "type": "boolean" }
+      }
+    }
+  },
+  "firestore": {
+    "profiles/{userId}": {
+      "schema": { "$ref": "#/entities/Profile" },
+      "description": "User profiles"
+    },
+    "products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Store products"
+    }
+  }
+}

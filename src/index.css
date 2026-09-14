@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-pupa-black: #050505;
+  --color-pupa-off-black: #0a0a0a;
+  --color-pupa-dark-gray: #111111;
+  --color-pupa-graphite: #1a1a1a;
+  --color-pupa-gray: #333333;
+  --color-pupa-white: #ffffff;
+  --color-pupa-off-white: #f4f4f5;
+  --color-pupa-neon: #00f0ff;
+
+  --font-heading: 'Oswald', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply antialiased overflow-x-hidden min-h-screen bg-pupa-black text-pupa-off-white font-body;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading uppercase tracking-wide;
+  }
+}
